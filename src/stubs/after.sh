@@ -42,10 +42,10 @@ if [ ! -f /usr/local/custom_homestead ]; then
 	#
 	# update node
 	#
-	sudo npm install -g npm
 	sudo npm cache clean -f
 	sudo npm install -g n
-	sudo n stable
+	sudo n latest
+	sudo npm install -g npm
 
 	#
 	# install mc
