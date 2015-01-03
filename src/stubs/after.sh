@@ -44,7 +44,7 @@ if [ ! -f /usr/local/custom_homestead ]; then
 	#
 	sudo npm cache clean -f
 	sudo npm install -g n
-	sudo n latest
+	sudo n stable
 	sudo npm install -g npm
 
 	#
@@ -63,42 +63,40 @@ if [ ! -f /usr/local/custom_homestead ]; then
 	echo "source /usr/local/rvm/environments/default" >> /home/vagrant/.zshrc
 	/usr/bin/zsh --login
 
-	echo "\
+	echo '\
 
 donpm()
 {
-    if [ ! ${1} ]; then
+    if [ ${1} ]; then
 
         SITE=${1:-"default"}
 
-        if [ ! -f /home/vagrant/Greenzones/$SITE/artisan ]; then
-            echo \"Not a laravel project [/home/vagrant/Greenzones/$SITE]\"
+        if [ ! -f "/home/vagrant/Greenzones/$SITE/artisan" ]; then
+            echo "Not a laravel project [/home/vagrant/Greenzones/$SITE]"
             exit 0
         fi
 
-        if [ ! -d /usr/local/npm/$SITE ]; then
+        if [ ! -d "/usr/local/npm/$SITE" ]; then
             sudo mkdir -p /usr/local/npm/$SITE
         fi
 
-        if [ ! -f /usr/local/npm/$SITE/package.json ]; then
-            sudo cp -f /home/vagrant/Greenzones/$SITE/package.json /usr/local/npm/$SITE/
-        fi
-
         cd /usr/local/npm/$SITE
+        sudo cp -f /home/vagrant/Greenzones/$SITE/package.json .
         sudo npm install
 
-        if [ ! -L /home/vagrant/Code/Greenzones/$SITE/node_modules ]; then
+        if [ ! -L "/home/vagrant/Greenzones/$SITE/node_modules" ]; then
             sudo ln -s /usr/local/npm/$SITE/node_modules /home/vagrant/Greenzones/$SITE/node_modules
         fi
 
         cd /home/vagrant/Greenzones/$SITE
     else
-        echo 'You must supply the project dir name (e.g. winpm splash-page).'
+        echo "You must supply the project dir name (e.g. winpm splash-page)."
     fi
 }
 
 alias winpm=donpm
-" | tee -a /home/vagrant/.zshrc
+' | tee -a /home/vagrant/.zshrc
+
 
     #
     # remember that the extra software is installed
