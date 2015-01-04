@@ -51,29 +51,6 @@ if [ ! -f /usr/local/custom_homestead ]; then
 	sudo n stable
 	sudo npm install -g npm
 
-    #
-    # install mongodb
-    # https://github.com/DoSomething/ds-homestead/blob/master/scripts/mongodb.sh
-    #
-    echo "$(tput setaf 7)Installing MongoDB"
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-    echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
-    sudo apt-get update
-    sudo apt-get install -qq mongodb-org
-
-    if [ "$1" == "true" ]; then
-        sed -i "s/bind_ip = */bind_ip = 0.0.0.0/" /etc/mongod.conf
-    fi
-
-    sudo apt-get -y install php-pear php5-dev
-    echo 'no' | sudo tee /home/vagrant/answers.txt
-    sudo pecl install mongo < /home/vagrant/answers.txt
-    rm /home/vagrant/answers.txt
-    echo 'extension=mongo.so' | sudo tee /etc/php5/mods-available/mongo.ini
-    ln -s /etc/php5/mods-available/mongo.ini /etc/php5/fpm/conf.d/mongo.ini
-    ln -s /etc/php5/mods-available/mongo.ini /etc/php5/cli/conf.d/mongo.ini
-    sudo service php5-fpm restart
-
 	#
 	# install mc
 	#
@@ -90,6 +67,11 @@ if [ ! -f /usr/local/custom_homestead ]; then
     cp /vagrant/src/stubs/aliases /home/vagrant/.zshrc
 	chsh -s /usr/bin/zsh vagrant
 	/usr/bin/zsh --login
+
+    #
+    # copy mongodb script
+    #
+    cp /vagrant/src/stubs/mongodb.sh /home/vagrant/mongodb.sh
 
     #
     # remember that the extra software is installed
