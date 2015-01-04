@@ -1,18 +1,80 @@
-alias ..="cd .."
-alias ...="cd ../.."
+export ZSH=$HOME/.oh-my-zsh
+export ARCHFLAGS="-arch x86_64"
+export HISTSIZE=100000 SAVEHIST=100000 HISTFILE=~/.zhistory
+export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-alias h='cd ~'
-alias c='clear'
+ZSH_THEME="robbyrussell"
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
+
+# DISABLE_LS_COLORS="true"
+# DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_TITLE="true"
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+# HIST_STAMPS="mm/dd/yyyy"
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(colored-man colorize composer cp extract git history history-substring-search laravel4)
+
+setopt BRACE_CCL
+#unsetopt correct_all
+
+source $ZSH/oh-my-zsh.sh
+source /usr/local/rvm/environments/default
+
+# User configuration
+# -------------------------
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# User Functions
+# -------------------------
 
 function serve() {
-	if [[ "$1" && "$2" ]]
-	then
-		sudo dos2unix /vagrant/scripts/serve.sh
-		sudo bash /vagrant/scripts/serve.sh "$1" "$2"
-	else
-		echo "Error: missing required parameters."
-		echo "Usage: "
-		echo "  serve domain path"
-	fi
+    if [[ "$1" && "$2" ]]
+    then
+        sudo dos2unix /vagrant/scripts/serve.sh
+        sudo bash /vagrant/scripts/serve.sh "$1" "$2"
+    else
+        echo "Error: missing required parameters."
+        echo "Usage: "
+        echo "  serve domain path"
+    fi
 }
 
+donpm()
+{
+    if [ ${1} ]; then
+
+        SITE=${1:-"default"}
+
+        if [ ! -f "/home/vagrant/Greenzones/$SITE/artisan" ]; then
+            echo "Not a laravel project [/home/vagrant/Greenzones/$SITE]"
+            exit 0
+        fi
+
+        if [ ! -d "/usr/local/npm/$SITE" ]; then
+            sudo mkdir -p /usr/local/npm/$SITE
+        fi
+
+        if [ ! -f "/usr/local/npm/$SITE/package.json" ]; then
+            sudo cp -f /home/vagrant/Greenzones/$SITE/package.json /usr/local/npm/$SITE/
+        fi
+
+        cd /usr/local/npm/$SITE
+        sudo npm install
+
+        if [ ! -L "/home/vagrant/Greenzones/$SITE/node_modules" ]; then
+            sudo ln -s /usr/local/npm/$SITE/node_modules /home/vagrant/Greenzones/$SITE/node_modules
+        fi
+
+        cd /home/vagrant/Greenzones/$SITE
+    else
+        echo "You must supply the project dir name (e.g. winpm splash-page)."
+    fi
+}
+
+# User Aliases
+# -------------------------
+
+alias winpm=donpm
