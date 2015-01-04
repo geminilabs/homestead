@@ -17,7 +17,7 @@ sudo apt-get install -qq mongodb-org
 if [ $1 == "true" ]; then
     # enable remote access
     # setting the mongodb bind_ip to allow connections from everywhere
-    sed -i "s/bind_ip = */bind_ip = 0.0.0.0/" /etc/mongod.conf
+    sudo sed -i "s/bind_ip = */bind_ip = 0.0.0.0/" /etc/mongod.conf
 fi
 
 # Test if PHP is installed
@@ -36,7 +36,9 @@ if [ $PHP_IS_INSTALLED -eq 0 ]; then
     # add extencion file and restart service
     echo 'extension=mongo.so' | sudo tee /etc/php5/mods-available/mongo.ini
 
-    ln -s /etc/php5/mods-available/mongo.ini /etc/php5/fpm/conf.d/mongo.ini
-    ln -s /etc/php5/mods-available/mongo.ini /etc/php5/cli/conf.d/mongo.ini
+    sudo ln -s /etc/php5/mods-available/mongo.ini /etc/php5/fpm/conf.d/mongo.ini
+    sudo ln -s /etc/php5/mods-available/mongo.ini /etc/php5/cli/conf.d/mongo.ini
     sudo service php5-fpm restart
 fi
+
+touch /home/vagrant/.mongo_installed

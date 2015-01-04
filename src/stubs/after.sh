@@ -64,14 +64,15 @@ if [ ! -f /usr/local/custom_homestead ]; then
     echo "$(tput setaf 7)Installing Zsh"
 	apt-get install zsh -y
 	git clone git://github.com/robbyrussell/oh-my-zsh.git /home/vagrant/.oh-my-zsh
-    cp /vagrant/src/stubs/aliases /home/vagrant/.zshrc
+    cp /vagrant/src/stubs/zshrc /home/vagrant/.zshrc
 	chsh -s /usr/bin/zsh vagrant
 	/usr/bin/zsh --login
 
     #
-    # copy mongodb script
+    # copy files
     #
     cp /vagrant/src/stubs/mongodb.sh /home/vagrant/mongodb.sh
+    sudo chown -R vagrant:vagrant /home/vagrant
 
     #
     # remember that the extra software is installed
