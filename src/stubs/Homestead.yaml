@@ -14,7 +14,7 @@ folders:
 
 sites:
     - map: greenzones.dev
-      to: /home/vagrant/Greenzones/splash-page/public
+      to: /home/vagrant/Greenzones/mvp/public
 
 databases:
     - homestead
