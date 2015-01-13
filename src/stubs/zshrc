@@ -36,8 +36,8 @@ donpm()
 
         SITE=${1:-"default"}
 
-        if [ ! -f "/home/vagrant/Greenzones/$SITE/artisan" ]; then
-            echo "Not a laravel project [/home/vagrant/Greenzones/$SITE]"
+        if [ ! -f "/home/vagrant/Greenzones/$SITE/package.json" ]; then
+            echo "No 'package.json' found in [/home/vagrant/Greenzones/$SITE]"
             exit 0
         fi
 
@@ -58,7 +58,7 @@ donpm()
 
         cd /home/vagrant/Greenzones/$SITE
     else
-        echo "You must supply the project dir name (e.g. winpm splash-page)."
+        echo "You must supply the project dir name (e.g. winpm api)."
     fi
 }
 
@@ -66,3 +66,4 @@ donpm()
 # -------------------------
 
 alias winpm=donpm
+alias artisan='php artisan'

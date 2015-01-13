@@ -15,3 +15,44 @@ function serve() {
         echo "  serve domain path"
     fi
 }
+
+# User Functions
+# -------------------------
+
+donpm()
+{
+    if [ ${1} ]; then
+
+        SITE=${1:-"default"}
+
+        if [ ! -f "/home/vagrant/Greenzones/$SITE/package.json" ]; then
+            echo "No 'package.json' found in [/home/vagrant/Greenzones/$SITE]"
+            exit 0
+        fi
+
+        if [ ! -d "/usr/local/npm/$SITE" ]; then
+            sudo mkdir -p /usr/local/npm/$SITE
+        fi
+
+        if [ ! -f "/usr/local/npm/$SITE/package.json" ]; then
+            sudo cp -f /home/vagrant/Greenzones/$SITE/package.json /usr/local/npm/$SITE/
+        fi
+
+        cd /usr/local/npm/$SITE
+        sudo npm install
+
+        if [ ! -L "/home/vagrant/Greenzones/$SITE/node_modules" ]; then
+            sudo ln -s /usr/local/npm/$SITE/node_modules /home/vagrant/Greenzones/$SITE/node_modules
+        fi
+
+        cd /home/vagrant/Greenzones/$SITE
+    else
+        echo "You must supply the project dir name (e.g. winpm api)."
+    fi
+}
+
+# User Aliases
+# -------------------------
+
+alias winpm=donpm
+alias artisan='php artisan'

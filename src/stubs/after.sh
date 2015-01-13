@@ -65,14 +65,21 @@ if [ ! -f /usr/local/custom_homestead ]; then
 	apt-get install zsh -y
 	git clone git://github.com/robbyrussell/oh-my-zsh.git /home/vagrant/.oh-my-zsh
     cp /vagrant/src/stubs/zshrc /home/vagrant/.zshrc
+	/bin/bash --login
 	chsh -s /usr/bin/zsh vagrant
 	/usr/bin/zsh --login
 
     #
     # copy files
     #
-    cp /vagrant/src/stubs/mongodb.sh /home/vagrant/mongodb.sh
+    cp /vagrant/src/stubs/pgpass /home/vagrant/.pgpass
+    cp /vagrant/src/stubs/postgresql /home/vagrant/.postgresql
+
+    #
+    # set permissions
+    #
     sudo chown -R vagrant:vagrant /home/vagrant
+    sudo chmod 600 /home/vagrant/.pgpass
 
     #
     # remember that the extra software is installed
